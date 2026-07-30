@@ -15,10 +15,12 @@ import { Route as DuasRouteImport } from './routes/duas'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssistantRouteImport } from './routes/assistant'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as QuranIndexRouteImport } from './routes/quran.index'
 import { Route as QuranSurahRouteImport } from './routes/quran.$surah'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const QiblaRoute = QiblaRouteImport.update({
   id: '/qibla',
@@ -50,6 +52,10 @@ const AssistantRoute = AssistantRouteImport.update({
   path: '/assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -70,6 +76,11 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -79,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/duas': typeof DuasRoute
   '/hadith': typeof HadithRoute
   '/qibla': typeof QiblaRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/api/chat': typeof ApiChatRoute
   '/quran/$surah': typeof QuranSurahRoute
   '/quran/': typeof QuranIndexRoute
@@ -91,6 +103,7 @@ export interface FileRoutesByTo {
   '/duas': typeof DuasRoute
   '/hadith': typeof HadithRoute
   '/qibla': typeof QiblaRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/api/chat': typeof ApiChatRoute
   '/quran/$surah': typeof QuranSurahRoute
   '/quran': typeof QuranIndexRoute
@@ -98,12 +111,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/assistant': typeof AssistantRoute
   '/auth': typeof AuthRoute
   '/calendar': typeof CalendarRoute
   '/duas': typeof DuasRoute
   '/hadith': typeof HadithRoute
   '/qibla': typeof QiblaRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/api/chat': typeof ApiChatRoute
   '/quran/$surah': typeof QuranSurahRoute
   '/quran/': typeof QuranIndexRoute
@@ -118,6 +133,7 @@ export interface FileRouteTypes {
     | '/duas'
     | '/hadith'
     | '/qibla'
+    | '/admin'
     | '/api/chat'
     | '/quran/$surah'
     | '/quran/'
@@ -130,18 +146,21 @@ export interface FileRouteTypes {
     | '/duas'
     | '/hadith'
     | '/qibla'
+    | '/admin'
     | '/api/chat'
     | '/quran/$surah'
     | '/quran'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/assistant'
     | '/auth'
     | '/calendar'
     | '/duas'
     | '/hadith'
     | '/qibla'
+    | '/_authenticated/admin'
     | '/api/chat'
     | '/quran/$surah'
     | '/quran/'
@@ -149,6 +168,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AssistantRoute: typeof AssistantRoute
   AuthRoute: typeof AuthRoute
   CalendarRoute: typeof CalendarRoute
@@ -204,6 +224,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -232,11 +259,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AssistantRoute: AssistantRoute,
   AuthRoute: AuthRoute,
   CalendarRoute: CalendarRoute,
@@ -250,13 +296,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
