@@ -34,6 +34,8 @@ const nav = [
 export function AppShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const { user, signOut } = useAuth();
+  const { isAdmin } = useIsAdmin();
+
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
@@ -104,6 +106,15 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Button>
             {user ? (
               <>
+                {isAdmin && (
+                  <Button asChild variant="outline" size="sm" className="rounded-full gap-1.5">
+                    <Link to="/admin">
+                      <ShieldCheck className="h-4 w-4" />
+                      <span className="hidden sm:inline">Admin</span>
+                    </Link>
+                  </Button>
+                )}
+
                 <div className="hidden sm:flex items-center gap-2 pl-2 pr-1">
                   <div className="h-8 w-8 rounded-full bg-primary/10 text-primary grid place-items-center">
                     <User className="h-4 w-4" />
