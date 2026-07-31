@@ -17,6 +17,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/logo.png.asset.json";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 
@@ -59,12 +60,13 @@ export function AppShell({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-40 glass border-b">
         <div className="mx-auto max-w-7xl px-4 h-16 flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2 mr-2">
-            <div
-              className="h-9 w-9 rounded-xl grid place-items-center text-primary-foreground shadow-elegant"
-              style={{ backgroundImage: "var(--gradient-primary)" }}
-            >
-              <span className="font-display text-lg">ٱ</span>
-            </div>
+            <img
+              src={logo.url}
+              alt="Islamic World logo"
+              className="h-10 w-10 rounded-full shadow-gold ring-1 ring-gold/40"
+              width={40}
+              height={40}
+            />
             <div className="hidden sm:block leading-tight">
               <div className="font-display text-lg">Islamic World</div>
               <div className="text-[10px] uppercase tracking-widest gold-text -mt-0.5">
