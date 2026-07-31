@@ -188,7 +188,34 @@ function HomePage() {
                     {countdown ?? "--:--:--"}
                   </div>
                 </div>
-                {!coords && !locLoading && (
+                  <div className="mt-5 grid grid-cols-3 sm:grid-cols-5 gap-2">
+                    {(
+                      ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"] as const
+                    ).map((k) => {
+                      const Icon = PRAYER_ICONS[k];
+                      const isNext = upcoming?.name === k;
+                      return (
+                        <div
+                          key={k}
+                          className={
+                            "rounded-xl border px-2 py-2 text-center " +
+                            (isNext
+                              ? "bg-white/25 border-white/40"
+                              : "bg-white/5 border-white/10")
+                          }
+                        >
+                          <Icon className="h-4 w-4 mx-auto opacity-80" />
+                          <div className="text-[10px] uppercase tracking-widest mt-1 text-white/70">
+                            {PRAYER_LABELS[k]}
+                          </div>
+                          <div className="text-sm font-medium">
+                            {timings ? timings[k].slice(0, 5) : "--:--"}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {!coords && !locLoading && (
                   <div className="mt-4 text-xs text-white/80">
                     Enable location for accurate prayer times.
                   </div>
