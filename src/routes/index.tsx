@@ -51,6 +51,14 @@ export const Route = createFileRoute("/")({
 });
 
 
+const PRAYER_ICONS = {
+  Fajr: Sunrise,
+  Dhuhr: Sun,
+  Asr: CloudSun,
+  Maghrib: Sunset,
+  Isha: Moon,
+} as const;
+
 function useNow() {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
