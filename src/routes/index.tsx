@@ -6,7 +6,6 @@ import {
   fetchPrayerTimes,
   formatCountdown,
   nextPrayer,
-  PRAYER_LABELS,
   type PrayerTimes,
 } from "@/lib/prayer";
 import { useGeolocation } from "@/hooks/useGeolocation";
@@ -19,8 +18,6 @@ import {
   Sparkles,
   ScrollText,
   MapPin,
-  Sunrise,
-  Sun,
   CloudSun,
   Sunset,
   Moon,
@@ -28,6 +25,7 @@ import {
 } from "lucide-react";
 import { HADITHS } from "@/data/hadith";
 import { DUAS } from "@/data/duas";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
