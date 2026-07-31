@@ -6,6 +6,7 @@ import {
   fetchPrayerTimes,
   formatCountdown,
   nextPrayer,
+  PRAYER_LABELS,
   type PrayerTimes,
 } from "@/lib/prayer";
 import { useGeolocation } from "@/hooks/useGeolocation";
@@ -18,6 +19,8 @@ import {
   Sparkles,
   ScrollText,
   MapPin,
+  Sunrise,
+  Sun,
   CloudSun,
   Sunset,
   Moon,
