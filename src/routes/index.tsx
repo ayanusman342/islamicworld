@@ -127,6 +127,13 @@ function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-10 md:py-14 relative">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="text-primary-foreground">
+              <img
+                src={logo.url}
+                alt="Islamic World logo"
+                className="h-24 w-24 md:h-28 md:w-28 rounded-full shadow-gold ring-1 ring-gold/40 mb-5"
+                width={112}
+                height={112}
+              />
               <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-3 py-1 text-xs uppercase tracking-[0.2em]">
                 <Star className="h-3 w-3" />
                 As-salāmu ʿalaykum
