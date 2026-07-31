@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { HADITHS } from "@/data/hadith";
 import { DUAS } from "@/data/duas";
+import logo from "@/assets/logo.png.asset.json";
 
 
 export const Route = createFileRoute("/")({
