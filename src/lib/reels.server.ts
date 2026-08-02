@@ -1,31 +1,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import type { ReelDTO } from "@/data/reels";
 
-export type ReelDTO = {
-  id: string;
-  title: string;
-  description: string | null;
-  category: string;
-  videoUrl: string;
-  thumbnailUrl: string | null;
-  durationSeconds: number | null;
-  status: string;
-  views: number;
-  createdAt: string;
-  authorName: string | null;
-  likes: number;
-  likedByMe: boolean;
-};
-
-export const REEL_CATEGORIES = [
-  "General",
-  "Quran Recitation",
-  "Nasheed",
-  "Reminder",
-  "Seerah",
-  "Dua",
-  "Lecture",
-] as const;
 
 export function createPublicClient() {
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
