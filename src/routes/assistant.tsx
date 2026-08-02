@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sparkles, Send, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { Link } from "@tanstack/react-router";
+
 
 export const Route = createFileRoute("/assistant")({
   head: () => ({
@@ -33,13 +37,25 @@ const SUGGESTIONS = [
 function AssistantPage() {
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { user, loading } = useAuth();
 
   const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+      fetch: async (input, init) => {
+        const { data } = await supabase.auth.getSession();
+        const headers = new Headers(init?.headers);
+        if (data.session?.access_token) {
+          headers.set("Authorization", `Bearer ${data.session.access_token}`);
+        }
+        return fetch(input, { ...init, headers });
+      },
+    }),
     onError: (e) => console.error(e),
   });
 
   const isBusy = status === "submitted" || status === "streaming";
+
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -50,10 +66,28 @@ function AssistantPage() {
 
   const submit = (text: string) => {
     const v = text.trim();
-    if (!v || isBusy) return;
+    if (!v || isBusy || !user) return;
     void sendMessage({ text: v });
     setInput("");
   };
+
+  if (!loading && !user) {
+    return (
+      <AppShell>
+        <div className="mx-auto max-w-xl px-4 py-20 text-center">
+          <Sparkles className="mx-auto h-8 w-8 text-primary" />
+          <h1 className="font-display text-3xl mt-3">Sign in to ask</h1>
+          <p className="text-muted-foreground mt-2">
+            The AI study assistant is available to signed-in members.
+          </p>
+          <Button asChild className="mt-6">
+            <Link to="/auth">Sign in</Link>
+          </Button>
+        </div>
+      </AppShell>
+    );
+  }
+
 
   return (
     <AppShell>
