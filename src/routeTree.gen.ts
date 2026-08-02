@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReelsRouteImport } from './routes/reels'
 import { Route as QiblaRouteImport } from './routes/qibla'
 import { Route as HadithRouteImport } from './routes/hadith'
 import { Route as DuasRouteImport } from './routes/duas'
@@ -22,6 +23,11 @@ import { Route as QuranSurahRouteImport } from './routes/quran.$surah'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
+const ReelsRoute = ReelsRouteImport.update({
+  id: '/reels',
+  path: '/reels',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QiblaRoute = QiblaRouteImport.update({
   id: '/qibla',
   path: '/qibla',
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/duas': typeof DuasRoute
   '/hadith': typeof HadithRoute
   '/qibla': typeof QiblaRoute
+  '/reels': typeof ReelsRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/api/chat': typeof ApiChatRoute
   '/quran/$surah': typeof QuranSurahRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/duas': typeof DuasRoute
   '/hadith': typeof HadithRoute
   '/qibla': typeof QiblaRoute
+  '/reels': typeof ReelsRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/api/chat': typeof ApiChatRoute
   '/quran/$surah': typeof QuranSurahRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/duas': typeof DuasRoute
   '/hadith': typeof HadithRoute
   '/qibla': typeof QiblaRoute
+  '/reels': typeof ReelsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/api/chat': typeof ApiChatRoute
   '/quran/$surah': typeof QuranSurahRoute
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
     | '/duas'
     | '/hadith'
     | '/qibla'
+    | '/reels'
     | '/admin'
     | '/api/chat'
     | '/quran/$surah'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/duas'
     | '/hadith'
     | '/qibla'
+    | '/reels'
     | '/admin'
     | '/api/chat'
     | '/quran/$surah'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/duas'
     | '/hadith'
     | '/qibla'
+    | '/reels'
     | '/_authenticated/admin'
     | '/api/chat'
     | '/quran/$surah'
@@ -175,6 +187,7 @@ export interface RootRouteChildren {
   DuasRoute: typeof DuasRoute
   HadithRoute: typeof HadithRoute
   QiblaRoute: typeof QiblaRoute
+  ReelsRoute: typeof ReelsRoute
   ApiChatRoute: typeof ApiChatRoute
   QuranSurahRoute: typeof QuranSurahRoute
   QuranIndexRoute: typeof QuranIndexRoute
@@ -182,6 +195,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reels': {
+      id: '/reels'
+      path: '/reels'
+      fullPath: '/reels'
+      preLoaderRoute: typeof ReelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/qibla': {
       id: '/qibla'
       path: '/qibla'
@@ -289,6 +309,7 @@ const rootRouteChildren: RootRouteChildren = {
   DuasRoute: DuasRoute,
   HadithRoute: HadithRoute,
   QiblaRoute: QiblaRoute,
+  ReelsRoute: ReelsRoute,
   ApiChatRoute: ApiChatRoute,
   QuranSurahRoute: QuranSurahRoute,
   QuranIndexRoute: QuranIndexRoute,
