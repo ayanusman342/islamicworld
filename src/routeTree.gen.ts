@@ -21,6 +21,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as QuranIndexRouteImport } from './routes/quran.index'
 import { Route as QuranSurahRouteImport } from './routes/quran.$surah'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedReelsReviewRouteImport } from './routes/_authenticated/reels-review'
 import { Route as AuthenticatedMyReelsRouteImport } from './routes/_authenticated/my-reels'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
@@ -83,6 +84,12 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedReelsReviewRoute =
+  AuthenticatedReelsReviewRouteImport.update({
+    id: '/reels-review',
+    path: '/reels-review',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedMyReelsRoute = AuthenticatedMyReelsRouteImport.update({
   id: '/my-reels',
   path: '/my-reels',
@@ -105,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/reels': typeof ReelsRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/my-reels': typeof AuthenticatedMyReelsRoute
+  '/reels-review': typeof AuthenticatedReelsReviewRoute
   '/api/chat': typeof ApiChatRoute
   '/quran/$surah': typeof QuranSurahRoute
   '/quran/': typeof QuranIndexRoute
@@ -120,6 +128,7 @@ export interface FileRoutesByTo {
   '/reels': typeof ReelsRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/my-reels': typeof AuthenticatedMyReelsRoute
+  '/reels-review': typeof AuthenticatedReelsReviewRoute
   '/api/chat': typeof ApiChatRoute
   '/quran/$surah': typeof QuranSurahRoute
   '/quran': typeof QuranIndexRoute
@@ -137,6 +146,7 @@ export interface FileRoutesById {
   '/reels': typeof ReelsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/my-reels': typeof AuthenticatedMyReelsRoute
+  '/_authenticated/reels-review': typeof AuthenticatedReelsReviewRoute
   '/api/chat': typeof ApiChatRoute
   '/quran/$surah': typeof QuranSurahRoute
   '/quran/': typeof QuranIndexRoute
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/reels'
     | '/admin'
     | '/my-reels'
+    | '/reels-review'
     | '/api/chat'
     | '/quran/$surah'
     | '/quran/'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/reels'
     | '/admin'
     | '/my-reels'
+    | '/reels-review'
     | '/api/chat'
     | '/quran/$surah'
     | '/quran'
@@ -185,6 +197,7 @@ export interface FileRouteTypes {
     | '/reels'
     | '/_authenticated/admin'
     | '/_authenticated/my-reels'
+    | '/_authenticated/reels-review'
     | '/api/chat'
     | '/quran/$surah'
     | '/quran/'
@@ -291,6 +304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/reels-review': {
+      id: '/_authenticated/reels-review'
+      path: '/reels-review'
+      fullPath: '/reels-review'
+      preLoaderRoute: typeof AuthenticatedReelsReviewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/my-reels': {
       id: '/_authenticated/my-reels'
       path: '/my-reels'
@@ -311,11 +331,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedMyReelsRoute: typeof AuthenticatedMyReelsRoute
+  AuthenticatedReelsReviewRoute: typeof AuthenticatedReelsReviewRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedMyReelsRoute: AuthenticatedMyReelsRoute,
+  AuthenticatedReelsReviewRoute: AuthenticatedReelsReviewRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

@@ -25,12 +25,14 @@ import { useEffect, useState } from "react";
 const nav = [
   { to: "/", label: "Home", Icon: Home },
   { to: "/quran", label: "Quran", Icon: BookOpen },
+  { to: "/reels", label: "Reels", Icon: Film },
   { to: "/hadith", label: "Hadith", Icon: ScrollText },
   { to: "/duas", label: "Duas", Icon: Hand },
   { to: "/qibla", label: "Qibla", Icon: Compass },
   { to: "/calendar", label: "Hijri", Icon: CalendarDays },
   { to: "/assistant", label: "AI Assistant", Icon: Sparkles },
 ] as const;
+
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
