@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReelsRouteImport } from './routes/reels'
 import { Route as QiblaRouteImport } from './routes/qibla'
 import { Route as HadithRouteImport } from './routes/hadith'
 import { Route as DuasRouteImport } from './routes/duas'
@@ -20,8 +21,15 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as QuranIndexRouteImport } from './routes/quran.index'
 import { Route as QuranSurahRouteImport } from './routes/quran.$surah'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedReelsReviewRouteImport } from './routes/_authenticated/reels-review'
+import { Route as AuthenticatedMyReelsRouteImport } from './routes/_authenticated/my-reels'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
+const ReelsRoute = ReelsRouteImport.update({
+  id: '/reels',
+  path: '/reels',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QiblaRoute = QiblaRouteImport.update({
   id: '/qibla',
   path: '/qibla',
@@ -76,6 +84,17 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedReelsReviewRoute =
+  AuthenticatedReelsReviewRouteImport.update({
+    id: '/reels-review',
+    path: '/reels-review',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMyReelsRoute = AuthenticatedMyReelsRouteImport.update({
+  id: '/my-reels',
+  path: '/my-reels',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -90,7 +109,10 @@ export interface FileRoutesByFullPath {
   '/duas': typeof DuasRoute
   '/hadith': typeof HadithRoute
   '/qibla': typeof QiblaRoute
+  '/reels': typeof ReelsRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/my-reels': typeof AuthenticatedMyReelsRoute
+  '/reels-review': typeof AuthenticatedReelsReviewRoute
   '/api/chat': typeof ApiChatRoute
   '/quran/$surah': typeof QuranSurahRoute
   '/quran/': typeof QuranIndexRoute
@@ -103,7 +125,10 @@ export interface FileRoutesByTo {
   '/duas': typeof DuasRoute
   '/hadith': typeof HadithRoute
   '/qibla': typeof QiblaRoute
+  '/reels': typeof ReelsRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/my-reels': typeof AuthenticatedMyReelsRoute
+  '/reels-review': typeof AuthenticatedReelsReviewRoute
   '/api/chat': typeof ApiChatRoute
   '/quran/$surah': typeof QuranSurahRoute
   '/quran': typeof QuranIndexRoute
@@ -118,7 +143,10 @@ export interface FileRoutesById {
   '/duas': typeof DuasRoute
   '/hadith': typeof HadithRoute
   '/qibla': typeof QiblaRoute
+  '/reels': typeof ReelsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/my-reels': typeof AuthenticatedMyReelsRoute
+  '/_authenticated/reels-review': typeof AuthenticatedReelsReviewRoute
   '/api/chat': typeof ApiChatRoute
   '/quran/$surah': typeof QuranSurahRoute
   '/quran/': typeof QuranIndexRoute
@@ -133,7 +161,10 @@ export interface FileRouteTypes {
     | '/duas'
     | '/hadith'
     | '/qibla'
+    | '/reels'
     | '/admin'
+    | '/my-reels'
+    | '/reels-review'
     | '/api/chat'
     | '/quran/$surah'
     | '/quran/'
@@ -146,7 +177,10 @@ export interface FileRouteTypes {
     | '/duas'
     | '/hadith'
     | '/qibla'
+    | '/reels'
     | '/admin'
+    | '/my-reels'
+    | '/reels-review'
     | '/api/chat'
     | '/quran/$surah'
     | '/quran'
@@ -160,7 +194,10 @@ export interface FileRouteTypes {
     | '/duas'
     | '/hadith'
     | '/qibla'
+    | '/reels'
     | '/_authenticated/admin'
+    | '/_authenticated/my-reels'
+    | '/_authenticated/reels-review'
     | '/api/chat'
     | '/quran/$surah'
     | '/quran/'
@@ -175,6 +212,7 @@ export interface RootRouteChildren {
   DuasRoute: typeof DuasRoute
   HadithRoute: typeof HadithRoute
   QiblaRoute: typeof QiblaRoute
+  ReelsRoute: typeof ReelsRoute
   ApiChatRoute: typeof ApiChatRoute
   QuranSurahRoute: typeof QuranSurahRoute
   QuranIndexRoute: typeof QuranIndexRoute
@@ -182,6 +220,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reels': {
+      id: '/reels'
+      path: '/reels'
+      fullPath: '/reels'
+      preLoaderRoute: typeof ReelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/qibla': {
       id: '/qibla'
       path: '/qibla'
@@ -259,6 +304,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/reels-review': {
+      id: '/_authenticated/reels-review'
+      path: '/reels-review'
+      fullPath: '/reels-review'
+      preLoaderRoute: typeof AuthenticatedReelsReviewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/my-reels': {
+      id: '/_authenticated/my-reels'
+      path: '/my-reels'
+      fullPath: '/my-reels'
+      preLoaderRoute: typeof AuthenticatedMyReelsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -271,10 +330,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedMyReelsRoute: typeof AuthenticatedMyReelsRoute
+  AuthenticatedReelsReviewRoute: typeof AuthenticatedReelsReviewRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedMyReelsRoute: AuthenticatedMyReelsRoute,
+  AuthenticatedReelsReviewRoute: AuthenticatedReelsReviewRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -289,6 +352,7 @@ const rootRouteChildren: RootRouteChildren = {
   DuasRoute: DuasRoute,
   HadithRoute: HadithRoute,
   QiblaRoute: QiblaRoute,
+  ReelsRoute: ReelsRoute,
   ApiChatRoute: ApiChatRoute,
   QuranSurahRoute: QuranSurahRoute,
   QuranIndexRoute: QuranIndexRoute,
