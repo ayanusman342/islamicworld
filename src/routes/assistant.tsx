@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sparkles, Send, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { Link } from "@tanstack/react-router";
+
 
 export const Route = createFileRoute("/assistant")({
   head: () => ({
@@ -33,13 +37,25 @@ const SUGGESTIONS = [
 function AssistantPage() {
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { user, loading } = useAuth();
 
   const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+      fetch: async (input, init) => {
+        const { data } = await supabase.auth.getSession();
+        const headers = new Headers(init?.headers);
+        if (data.session?.access_token) {
+          headers.set("Authorization", `Bearer ${data.session.access_token}`);
+        }
+        return fetch(input, { ...init, headers });
+      },
+    }),
     onError: (e) => console.error(e),
   });
 
   const isBusy = status === "submitted" || status === "streaming";
+
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
