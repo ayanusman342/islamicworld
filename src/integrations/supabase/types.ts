@@ -208,7 +208,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      increment_reel_views: { Args: { _reel_id: string }; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
