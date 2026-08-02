@@ -114,8 +114,10 @@ function HomePage() {
   );
   const countdown = upcoming ? formatCountdown(+upcoming.time - +now) : null;
 
-  const dailyHadith = HADITHS[new Date().getDate() % HADITHS.length];
-  const dailyDua = DUAS[(new Date().getDate() + 3) % DUAS.length];
+  const dayIndex = new Date().getUTCDate();
+  const dailyHadith = HADITHS[dayIndex % HADITHS.length];
+  const dailyDua = DUAS[(dayIndex + 3) % DUAS.length];
+
 
   return (
     <AppShell>
