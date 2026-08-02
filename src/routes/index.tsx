@@ -40,11 +40,11 @@ export const Route = createFileRoute("/")({
         content:
           "Your daily Islamic dashboard: next prayer countdown, today's verse, a hadith, a dua, and quick access to the Quran, Qibla, Hijri calendar, and an AI study assistant.",
       },
-      { property: "og:title", content: "Islamic World — Daily Dashboard" },
+      { property: "og:title", content: "Islamic World — Prayer times, Quran, Hadith & Duas" },
       {
         property: "og:description",
         content:
-          "Prayer times, Quran, Hadith and Duas — beautifully organised for your day.",
+          "Your daily Islamic dashboard: next prayer countdown, today's verse, a hadith, a dua, and quick access to the Quran, Qibla, Hijri calendar, and an AI study assistant.",
       },
     ],
   }),

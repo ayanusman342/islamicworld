@@ -80,21 +80,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "theme-color", content: "#0D3B2E" },
-      { title: "Islamic World — Quran, Prayer, Hadith & AI Assistant" },
+      { title: "Islamic World — Prayer times, Quran, Hadith & Duas" },
       {
         name: "description",
         content:
-          "A premium all-in-one Islamic platform: prayer times, Qibla, Hijri calendar, the Quran, authentic Hadith, Duas, and an AI Islamic study assistant.",
+          "Your daily Islamic dashboard: next prayer countdown, today's verse, a hadith, a dua, and quick access to the Quran, Qibla, Hijri calendar, and an AI study assistant.",
       },
       { name: "author", content: "Islamic World" },
-      { property: "og:title", content: "Islamic World" },
+      { property: "og:title", content: "Islamic World — Prayer times, Quran, Hadith & Duas" },
       {
         property: "og:description",
         content:
-          "Prayer times, Quran, Hadith, Duas, Qibla and an AI assistant for authentic Islamic study — in one elegant place.",
+          "Your daily Islamic dashboard: next prayer countdown, today's verse, a hadith, a dua, and quick access to the Quran, Qibla, Hijri calendar, and an AI study assistant.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Islamic World — Prayer times, Quran, Hadith & Duas" },
+      { name: "twitter:description", content: "Your daily Islamic dashboard: next prayer countdown, today's verse, a hadith, a dua, and quick access to the Quran, Qibla, Hijri calendar, and an AI study assistant." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8fad0ca3-1748-4699-ade9-c3689ce0bba7/id-preview-15dc8f7c--4589a242-55ea-4170-985d-8c1f3f71ba3d.lovable.app-1785653661759.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/8fad0ca3-1748-4699-ade9-c3689ce0bba7/id-preview-15dc8f7c--4589a242-55ea-4170-985d-8c1f3f71ba3d.lovable.app-1785653661759.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
