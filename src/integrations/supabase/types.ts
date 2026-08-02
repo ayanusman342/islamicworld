@@ -101,6 +101,80 @@ export type Database = {
         }
         Relationships: []
       }
+      reel_likes: {
+        Row: {
+          created_at: string
+          id: string
+          reel_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reel_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reel_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reel_likes_reel_id_fkey"
+            columns: ["reel_id"]
+            isOneToOne: false
+            referencedRelation: "reels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reels: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          duration_seconds: number | null
+          id: string
+          status: string
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          video_url: string
+          views: number
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number | null
+          id?: string
+          status?: string
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          video_url: string
+          views?: number
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          duration_seconds?: number | null
+          id?: string
+          status?: string
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          video_url?: string
+          views?: number
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -134,6 +208,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_reel_views: { Args: { _reel_id: string }; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
