@@ -121,14 +121,18 @@ export function AppShell({ children }: { children: ReactNode }) {
                   </Button>
                 )}
 
-                <div className="hidden sm:flex items-center gap-2 pl-2 pr-1">
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 pl-2 pr-1 rounded-full hover:bg-accent"
+                  aria-label="My profile"
+                >
                   <div className="h-8 w-8 rounded-full bg-primary/10 text-primary grid place-items-center">
                     <User className="h-4 w-4" />
                   </div>
-                  <span className="text-sm max-w-[140px] truncate">
+                  <span className="hidden sm:inline text-sm max-w-[140px] truncate">
                     {user.email}
                   </span>
-                </div>
+                </Link>
                 <Button
                   variant="ghost"
                   size="icon"
