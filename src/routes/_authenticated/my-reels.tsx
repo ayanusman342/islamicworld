@@ -101,12 +101,13 @@ function MyReelsPage() {
       if (upErr) throw upErr;
 
       await create({ data: { title, description, category, videoUrl: path } });
-      toast.success("Reel uploaded — pending review");
+      toast.success("Reel published");
       setTitle("");
       setDescription("");
       setFile(null);
       if (fileRef.current) fileRef.current.value = "";
       queryClient.invalidateQueries({ queryKey: ["my-reels"] });
+      queryClient.invalidateQueries({ queryKey: ["reels"] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Upload failed");
     } finally {
