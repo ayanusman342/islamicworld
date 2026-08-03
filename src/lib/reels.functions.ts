@@ -66,7 +66,7 @@ export const createReel = createServerFn({ method: "POST" })
       category: data.category,
       video_url: data.videoUrl,
       duration_seconds: data.durationSeconds,
-      status: "pending",
+      status: "approved",
     });
     if (error) throw new Error(error.message);
     return { ok: true };
