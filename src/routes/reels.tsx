@@ -3,11 +3,20 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { AppShell } from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Heart, Eye, Volume2, VolumeX, Upload, Film, Play } from "lucide-react";
+import {
+  Heart,
+  Eye,
+  Volume2,
+  VolumeX,
+  Upload,
+  Film,
+  Play,
+  X,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { REEL_CATEGORIES, type ReelDTO } from "@/data/reels";
 import {
   listReels,
@@ -25,12 +34,12 @@ export const Route = createFileRoute("/reels")({
       {
         name: "description",
         content:
-          "Watch short Islamic reels: Quran recitations, nasheeds, reminders and seerah clips shared by the Islamic World community.",
+          "Watch short Islamic reels full screen: Quran recitations, nasheeds, reminders and seerah clips shared by the Islamic World community.",
       },
       { property: "og:title", content: "Islamic Reels — Short Videos" },
       {
         property: "og:description",
-        content: "Quran recitations, nasheeds and reminders in short vertical videos.",
+        content: "Quran recitations, nasheeds and reminders in full-screen vertical videos.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -80,93 +89,138 @@ function ReelsPage() {
     }
   };
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollBy = (dir: 1 | -1) => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.scrollBy({ top: dir * el.clientHeight, behavior: "smooth" });
+  };
+
   return (
-    <AppShell>
-      <div className="mx-auto max-w-6xl px-4 py-8">
-        <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <div className="text-xs uppercase tracking-widest gold-text">Nur fi Daqiqa</div>
-            <h1 className="font-display text-4xl md:text-5xl mt-1">Islamic Reels</h1>
-            <p className="text-muted-foreground mt-2 max-w-xl">
-              Short vertical videos — recitations, nasheeds and reminders. Swipe or scroll
-              through the feed.
-            </p>
-          </div>
-          <Button asChild className="rounded-full gap-2">
-            <Link to="/my-reels">
-              <Upload className="h-4 w-4" />
-              Upload a reel
+    <div className="fixed inset-0 z-50 bg-black">
+      {/* Top bar */}
+      <div className="absolute top-0 inset-x-0 z-20 bg-gradient-to-b from-black/80 to-transparent">
+        <div className="flex items-center gap-2 px-4 h-14">
+          <Button
+            asChild
+            variant="ghost"
+            size="icon"
+            className="rounded-full text-white hover:bg-white/10"
+            aria-label="Close reels"
+          >
+            <Link to="/">
+              <X className="h-5 w-5" />
             </Link>
           </Button>
-        </header>
-
-        <div className="ornate-divider mb-6" />
-
-        <div className="flex gap-2 overflow-x-auto pb-4">
+          <span className="font-display text-lg text-white">Reels</span>
+          <div className="ml-auto flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMuted((m) => !m)}
+              aria-label={muted ? "Unmute" : "Mute"}
+              className="rounded-full text-white hover:bg-white/10"
+            >
+              {muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+            </Button>
+            <Button asChild size="sm" className="rounded-full gap-1.5">
+              <Link to="/profile">
+                <Upload className="h-4 w-4" />
+                <span className="hidden sm:inline">Upload</span>
+              </Link>
+            </Button>
+          </div>
+        </div>
+        <div className="flex gap-2 overflow-x-auto px-4 pb-3 no-scrollbar">
           {["All", ...REEL_CATEGORIES].map((c) => (
             <button
               key={c}
               onClick={() => setCategory(c)}
               className={cn(
-                "shrink-0 rounded-full px-4 h-9 text-sm border transition-colors",
+                "shrink-0 rounded-full px-3 h-7 text-xs border transition-colors",
                 category === c
-                  ? "bg-primary text-primary-foreground border-transparent"
-                  : "text-muted-foreground hover:text-foreground hover:bg-accent",
+                  ? "bg-white text-black border-transparent"
+                  : "text-white/80 border-white/25 hover:bg-white/10",
               )}
             >
               {c}
             </button>
           ))}
         </div>
+      </div>
 
-        {reelsQuery.isPending ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[0, 1, 2].map((i) => (
-              <Skeleton key={i} className="aspect-[9/16] rounded-2xl" />
-            ))}
-          </div>
-        ) : reels.length === 0 ? (
-          <div className="glass rounded-2xl p-10 text-center">
-            <Film className="h-8 w-8 mx-auto text-muted-foreground" />
-            <h2 className="font-display text-2xl mt-3">No reels yet</h2>
-            <p className="text-muted-foreground mt-1">
+      {/* Desktop arrows */}
+      <div className="hidden md:flex flex-col gap-2 absolute right-4 top-1/2 -translate-y-1/2 z-20">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => scrollBy(-1)}
+          aria-label="Previous reel"
+          className="rounded-full text-white hover:bg-white/10"
+        >
+          <ChevronLeft className="h-5 w-5 rotate-90" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => scrollBy(1)}
+          aria-label="Next reel"
+          className="rounded-full text-white hover:bg-white/10"
+        >
+          <ChevronRight className="h-5 w-5 rotate-90" />
+        </Button>
+      </div>
+
+      {reelsQuery.isPending ? (
+        <div className="h-full grid place-items-center text-white/70">Loading reels…</div>
+      ) : reels.length === 0 ? (
+        <div className="h-full grid place-items-center px-6">
+          <div className="text-center">
+            <Film className="h-8 w-8 mx-auto text-white/60" />
+            <h2 className="font-display text-2xl mt-3 text-white">No reels yet</h2>
+            <p className="text-white/70 mt-1">
               Be the first to share a beneficial short video with the community.
             </p>
             <Button asChild className="rounded-full mt-4">
-              <Link to="/my-reels">Upload a reel</Link>
+              <Link to="/profile">Upload a reel</Link>
             </Button>
           </div>
-        ) : (
-          <div className="flex flex-col items-center gap-6 md:grid md:grid-cols-2 lg:grid-cols-3 md:items-stretch">
-            {reels.map((reel) => (
+        </div>
+      ) : (
+        <div
+          ref={containerRef}
+          className="h-full overflow-y-auto snap-y snap-mandatory no-scrollbar"
+        >
+          {reels.map((reel) => (
+            <section
+              key={reel.id}
+              className="h-full w-full snap-start snap-always flex items-center justify-center"
+            >
               <ReelCard
-                key={reel.id}
                 reel={reel}
                 muted={muted}
-                onToggleMute={() => setMuted((m) => !m)}
                 liked={likedIds.has(reel.id)}
                 onLike={() => onLike(reel)}
                 onView={() => view({ data: { id: reel.id } }).catch(() => {})}
               />
-            ))}
-          </div>
-        )}
-      </div>
-    </AppShell>
+            </section>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
 function ReelCard({
   reel,
   muted,
-  onToggleMute,
   liked,
   onLike,
   onView,
 }: {
   reel: ReelDTO;
   muted: boolean;
-  onToggleMute: () => void;
   liked: boolean;
   onLike: () => void;
   onView: () => void;
@@ -215,7 +269,7 @@ function ReelCard({
   };
 
   return (
-    <article className="relative w-full max-w-sm aspect-[9/16] overflow-hidden rounded-2xl bg-primary/90 shadow-elegant">
+    <article className="relative h-full w-full md:h-[92%] md:aspect-[9/16] md:w-auto md:rounded-2xl overflow-hidden bg-black">
       <video
         ref={videoRef}
         src={reel.videoUrl}
@@ -225,7 +279,7 @@ function ReelCard({
         playsInline
         preload="metadata"
         onClick={togglePlay}
-        className="absolute inset-0 h-full w-full object-cover cursor-pointer"
+        className="absolute inset-0 h-full w-full object-contain md:object-cover cursor-pointer"
       />
 
       {!playing && (
@@ -234,13 +288,13 @@ function ReelCard({
           aria-label="Play reel"
           className="absolute inset-0 grid place-items-center"
         >
-          <span className="h-14 w-14 rounded-full glass grid place-items-center">
-            <Play className="h-6 w-6 text-gold" />
+          <span className="h-16 w-16 rounded-full glass grid place-items-center">
+            <Play className="h-7 w-7 text-gold" />
           </span>
         </button>
       )}
 
-      <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/75 to-transparent">
+      <div className="absolute inset-x-0 bottom-0 p-5 pr-20 bg-gradient-to-t from-black/80 to-transparent">
         <Badge variant="secondary" className="mb-2">
           {reel.category}
         </Badge>
@@ -253,30 +307,23 @@ function ReelCard({
         </p>
       </div>
 
-      <div className="absolute right-3 bottom-28 flex flex-col items-center gap-3">
+      <div className="absolute right-3 bottom-32 flex flex-col items-center gap-4">
         <button
           onClick={onLike}
           aria-label={liked ? "Unlike reel" : "Like reel"}
           className="flex flex-col items-center gap-1 text-white"
         >
-          <span className="h-10 w-10 rounded-full glass grid place-items-center">
+          <span className="h-11 w-11 rounded-full glass grid place-items-center">
             <Heart className={cn("h-5 w-5", liked && "fill-current text-gold")} />
           </span>
           <span className="text-[11px]">{reel.likes}</span>
         </button>
         <div className="flex flex-col items-center gap-1 text-white">
-          <span className="h-10 w-10 rounded-full glass grid place-items-center">
+          <span className="h-11 w-11 rounded-full glass grid place-items-center">
             <Eye className="h-5 w-5" />
           </span>
           <span className="text-[11px]">{reel.views}</span>
         </div>
-        <button
-          onClick={onToggleMute}
-          aria-label={muted ? "Unmute" : "Mute"}
-          className="h-10 w-10 rounded-full glass grid place-items-center text-white"
-        >
-          {muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-        </button>
       </div>
     </article>
   );
