@@ -122,8 +122,7 @@ function MyReelsPage() {
           <div className="text-xs uppercase tracking-widest gold-text">Share Khayr</div>
           <h1 className="font-display text-4xl md:text-5xl mt-1">My Reels</h1>
           <p className="text-muted-foreground mt-2">
-            Upload beneficial short videos. Each reel is reviewed before it appears in the
-            public feed.
+            Upload beneficial short videos. Reels appear in the public feed right away.
           </p>
         </div>
         <div className="flex gap-2">
