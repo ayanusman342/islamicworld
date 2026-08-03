@@ -101,12 +101,13 @@ function MyReelsPage() {
       if (upErr) throw upErr;
 
       await create({ data: { title, description, category, videoUrl: path } });
-      toast.success("Reel uploaded — pending review");
+      toast.success("Reel published");
       setTitle("");
       setDescription("");
       setFile(null);
       if (fileRef.current) fileRef.current.value = "";
       queryClient.invalidateQueries({ queryKey: ["my-reels"] });
+      queryClient.invalidateQueries({ queryKey: ["reels"] });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Upload failed");
     } finally {
@@ -121,8 +122,7 @@ function MyReelsPage() {
           <div className="text-xs uppercase tracking-widest gold-text">Share Khayr</div>
           <h1 className="font-display text-4xl md:text-5xl mt-1">My Reels</h1>
           <p className="text-muted-foreground mt-2">
-            Upload beneficial short videos. Each reel is reviewed before it appears in the
-            public feed.
+            Upload beneficial short videos. Reels appear in the public feed right away.
           </p>
         </div>
         <div className="flex gap-2">
